@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IZI CLM Test</string>
+    <string name="app_description">Niniejsza aplikacja przeznaczona jest do sprawdzenia poprawności działania
+        prezentacji CLM i jej współpracy z aplikacją IZI FarmaProm.\n\nW celu przetestowania prezentacji CLM należy:\n1.
+        Skopiować wszystkie pliki prezentacji na urządzenie (nie może to być spakowane archiwum).\n2. Wybrać startowy
+        plik prezentacji poprzez przycisk \"Wskaż prezentację\" (najczęściej jest to index.html).\n3. Otworzyć prezentację
+        za pomocą przycisku \"Otwórz prezentację\".\n4. Po użyciu przycisku \"wstecz (back)\" na urządzeniu powinniśmy wyjść
+        z prezentacji. Jeśli tak się nie stanie oznacza to, że w prezentacji nie została odpowiednio zaimplementowana
+        funkcja pozwalająca wyjść z prezentacji i musi ona zostać poprawiona. W takiej sytuacji, aby wyjść z prezentacji
+        należy przytrzymać dłużej ekran i wybrać opcję \"WYJDŹ Z WEBVIEW\"
+    </string>
+    <string name="choose_program">Wybierz program</string>
+    <string name="path_button"><![CDATA[<b>Wskaż prezentację:</b><br /> <small>aktualna: $PATH</small>]]></string>
+    <string name="open_button">Otwórz prezentację</string>
+    <string name="result_label">Wynik:</string>
+    <string name="result_description">W sekcji pojawią się informacje na temat danych, które zostały zgromadzone w
+        prezentacji i będą przekazane do aplikacji IZI FarmaProm.\nJeśli żadne dane się nie pojawią oznacza to, że
+        prezentacja nie generuje dodatkowych danych przekazywanych do aplikacji IZI FarmaProm.
+    </string>
+
+
+</resources>
