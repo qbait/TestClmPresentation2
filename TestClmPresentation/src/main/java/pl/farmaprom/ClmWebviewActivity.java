@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -83,6 +84,7 @@ public class ClmWebviewActivity extends ActionBarActivity {
     }
 
     public class JSInterface {
+        @JavascriptInterface
         public void finish(String result) throws IOException {
             try {
                 presentationFinished = true;
