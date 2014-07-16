@@ -1,8 +1,11 @@
 package pl.farmaprom;
 
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
     TextView resultJsonTextView;
     String path;
     String result;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,29 @@ public class MainActivity extends ActionBarActivity {
         outState.putString("result", result);
     }
 
+    private class DecompressReceiver extends ResultReceiver {
+        public DecompressReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            long taskId = (int)resultData.getLong(DecompressService.EXTRA_ID);
+            if (resultCode == DecompressService.STARTED) {
+                progressDialog = ProgressDialog.show(MainActivity.this, "", "Rozpakowywanie...");
+            } else if (resultCode == DecompressService.FINISHED) {
+                String notificationText = "gotowa do użycia";
+                preferences.setPath(path);
+                updatePathButton();
+                progressDialog.dismiss();
+            } else if (resultCode == DecompressService.ERROR) {
+                String notificationText = "problem z przetwarzaniem";
+                progressDialog.dismiss();
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -67,8 +95,24 @@ public class MainActivity extends ActionBarActivity {
                         try {
                             final File file = FileUtils.getFile(this, uri);
                             path = file.getAbsolutePath();
-                            preferences.setPath(path);
-                            updatePathButton();
+                            String extension = FilenameUtils.getExtension(path);
+                            if(extension.equals("zip")) {
+                                Intent intent = new Intent(this, DecompressService.class);
+
+                                intent.putExtra(DecompressService.EXTRA_ZIPFILE, path);
+                                intent.putExtra(DecompressService.EXTRA_DESTINATION_LOCATION, FilenameUtils.getPath(path));
+                                intent.putExtra(DecompressService.EXTRA_ID, 1);
+                                intent.putExtra(DecompressService.EXTRA_RECEIVER, new DecompressReceiver(new Handler()));
+
+                                startService(intent);
+
+                                path = "/" + FilenameUtils.getPath(path) + FilenameUtils.getBaseName(path) + "/index.html";
+                            } else {
+                                preferences.setPath(path);
+                                updatePathButton();
+                            }
+
+
                         } catch (Exception e) {
                             Log.e("FileSelectorTestActivity", "File select error", e);
                         }

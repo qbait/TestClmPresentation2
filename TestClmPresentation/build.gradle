@@ -20,6 +20,7 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:19.+'
+    compile 'commons-io:commons-io:2.4'
     compile project(":aFileChooser")
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
