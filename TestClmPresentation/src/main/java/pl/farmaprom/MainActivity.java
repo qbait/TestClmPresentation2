@@ -43,22 +43,10 @@ public class MainActivity extends ActionBarActivity {
         resultJsonTextView = (TextView) findViewById(R.id.resultJsonTextView);
         preferences = new Preferences(this);
 
-        if (savedInstanceState == null) {
-            path = preferences.getPath();
-        } else {
-            path = savedInstanceState.getString("path");
-            result = savedInstanceState.getString("result");
-        }
+        path = preferences.getPath();
         updatePathButton();
         updateResultTextView();
 
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("path", path);
-        outState.putString("result", result);
     }
 
     private class DecompressReceiver extends ResultReceiver {
